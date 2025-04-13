@@ -7,7 +7,7 @@ import psycopg2
 conn = psycopg2.connect(
     dbname="users",
     user="postgres",
-    password="nrlbk777sdfs",
+    password="nrlbk777",
     host="localhost",
     port="5432"
 )
@@ -104,6 +104,12 @@ food_timer = 10  # 10 sec
 
 def game_over():
     global done
+    cursor.execute(
+        "INSERT INTO user_scores (username, score, level) VALUES (%s, %s, %s)",
+        (username, score, level)
+    )
+    conn.commit()
+
     font = pygame.font.SysFont("times new roman", 45)
     text = font.render(f"Game Over! Your score: {score}", True, gray)
     screen.fill(black)
@@ -114,6 +120,7 @@ def game_over():
     cursor.close()
     conn.close()
     exit()
+
 
 # main game loop
 while not done:
@@ -130,11 +137,8 @@ while not done:
             if event.key == pygame.K_RIGHT and direction != "left":
                 next_dir = "right"
             if event.key == pygame.K_p:
-                cursor.execute(
-                    "INSERT INTO user_scores (username, score, level) VALUES (%s, %s, %s)",
-                    (username, score, level)
-                )
-                conn.commit()
+                
+
                 print("Game paused and saved. Press P to resume.")
                 paused = True
                 while paused:
@@ -203,7 +207,7 @@ while not done:
     pygame.display.flip()
     pygame.time.delay(speed)
 
-# закрытие соединения
+
 cursor.close()
 conn.close()
 pygame.quit()
