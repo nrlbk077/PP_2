@@ -3,7 +3,7 @@ import random
 import time
 import psycopg2
 
-# Подключение к PostgreSQL
+
 conn = psycopg2.connect(
     dbname="users",
     user="postgres",
@@ -13,7 +13,7 @@ conn = psycopg2.connect(
 )
 cursor = conn.cursor()
 
-# Создание таблиц, если не существуют
+
 cursor.execute('''
 CREATE TABLE IF NOT EXISTS users (
     username TEXT PRIMARY KEY
@@ -30,7 +30,6 @@ CREATE TABLE IF NOT EXISTS user_scores (
 
 conn.commit()
 
-# Ввод имени пользователя
 username = input("Enter your username: ")
 
 cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
